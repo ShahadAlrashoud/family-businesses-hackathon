@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -10,7 +10,7 @@ interface AuthContextType {
   role: UserRole | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, fullName: string) => Promise<void>;
+   signUp: (email: string, password: string, fullName: string) => Promise<{ needsEmailConfirmation: boolean }>;
   signOut: () => Promise<void>;
 }
 
@@ -21,62 +21,102 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [role, setRole] = useState<UserRole | null>(null);
   const [loading, setLoading] = useState(true);
+  const syncVersionRef = useRef(0);
 
-  const fetchRole = async (userId: string) => {
-    const { data } = await supabase
+  const fetchRole = useCallback(async (userId: string): Promise<UserRole> => {
+    const { data, error } = await supabase
       .from("user_roles")
       .select("role")
       .eq("user_id", userId)
-      .single();
-    setRole(data?.role || "shareholder");
-  };
+      .maybeSingle();
+
+    if (error) {
+      console.error("Failed to fetch user role", error);
+    }
+
+    return data?.role || "shareholder";
+  }, []);
+
+  const syncAuthState = useCallback(
+    (nextSession: Session | null) => {
+      const syncId = ++syncVersionRef.current;
+      const nextUser = nextSession?.user ?? null;
+
+      setSession(nextSession);
+      setUser(nextUser);
+
+      if (!nextUser) {
+        setRole(null);
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+
+      void fetchRole(nextUser.id)
+        .then((nextRole) => {
+          if (syncVersionRef.current === syncId) {
+            setRole(nextRole);
+          }
+        })
+        .catch(() => {
+          if (syncVersionRef.current === syncId) {
+            setRole("shareholder");
+          }
+        })
+        .finally(() => {
+          if (syncVersionRef.current === syncId) {
+            setLoading(false);
+          }
+        });
+    },
+    [fetchRole],
+  );
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        if (session?.user) {
-          await fetchRole(session.user.id);
-        } else {
-          setRole(null);
-        }
-        setLoading(false);
-      }
+      (_event, nextSession) => {
+        syncAuthState(nextSession);
+      },
     );
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchRole(session.user.id);
-      }
-      setLoading(false);
+    void supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      syncAuthState(currentSession);
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [syncAuthState]);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
+    syncAuthState(data.session);
   };
 
   const signUp = async (email: string, password: string, fullName: string) => {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: { full_name: fullName },
-        emailRedirectTo: window.location.origin,
+        emailRedirectTo: `${window.location.origin}/login`,
       },
     });
     if (error) throw error;
+
+    if (data.session) {
+      syncAuthState(data.session);
+    }
+
+    return {
+      needsEmailConfirmation: !data.session && Boolean(data.user),
+    };
   };
 
   const signOut = async () => {
     await supabase.auth.signOut();
-    window.location.href = "/";
+    syncAuthState(null);
+    window.location.href = "/login";
   };
 
   return (
