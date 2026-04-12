@@ -175,7 +175,7 @@ export default function Login() {
                   <Label htmlFor="login-password">كلمة المرور</Label>
                   <Input id="login-password" name="password" type="password" required placeholder="••••••••" dir="ltr" autoComplete="current-password" />
                 </div>
-                <Button type="submit" className="w-full" disabled={submitting !== null || loading}>
+                <Button type="submit" className="w-full btn-transition" disabled={submitting !== null || loading}>
                   {submitting === "login" ? "جاري الدخول..." : "تسجيل الدخول"}
                 </Button>
               </form>
@@ -195,7 +195,7 @@ export default function Login() {
                   <Label htmlFor="signup-password">كلمة المرور</Label>
                   <Input id="signup-password" name="password" type="password" required minLength={8} placeholder="••••••••" dir="ltr" autoComplete="new-password" />
                 </div>
-                <Button type="submit" className="w-full" disabled={submitting !== null || loading}>
+                <Button type="submit" className="w-full btn-transition" disabled={submitting !== null || loading}>
                   {submitting === "signup" ? "جاري الإنشاء..." : "إنشاء حساب"}
                 </Button>
                 <p className="text-xs text-muted-foreground text-center">

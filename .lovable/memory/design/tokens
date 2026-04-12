@@ -1,0 +1,10 @@
+---
+name: Design tokens
+description: Green (#1a5c38) / Gold (#c9a84c) Arabic RTL design with Tajawal font
+type: design
+---
+Font: Tajawal (Google Fonts) — weights 300-900
+Primary green: hsl(150 55% 22%) ≈ #1a5c38
+Gold accent: hsl(43 55% 54%) ≈ #c9a84c
+Utility classes: .card-hover (lift+shadow), .btn-transition (scale on active), .glass-card (blur+border)
+Gradient hero: green-dark → green-medium → gold/25%
