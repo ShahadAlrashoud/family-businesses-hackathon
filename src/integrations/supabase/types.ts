@@ -38,6 +38,39 @@ export type Database = {
         }
         Relationships: []
       }
+      regulations: {
+        Row: {
+          category: Database["public"]["Enums"]["regulation_category"]
+          content: string | null
+          created_at: string
+          created_by: string
+          id: string
+          status: Database["public"]["Enums"]["regulation_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["regulation_category"]
+          content?: string | null
+          created_at?: string
+          created_by: string
+          id?: string
+          status?: Database["public"]["Enums"]["regulation_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["regulation_category"]
+          content?: string | null
+          created_at?: string
+          created_by?: string
+          id?: string
+          status?: Database["public"]["Enums"]["regulation_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -71,6 +104,13 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "shareholder" | "independent_director"
+      regulation_category:
+        | "ownership"
+        | "succession"
+        | "exit"
+        | "disputes"
+        | "womens_role"
+      regulation_status: "draft" | "active"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -199,6 +239,14 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "shareholder", "independent_director"],
+      regulation_category: [
+        "ownership",
+        "succession",
+        "exit",
+        "disputes",
+        "womens_role",
+      ],
+      regulation_status: ["draft", "active"],
     },
   },
 } as const
