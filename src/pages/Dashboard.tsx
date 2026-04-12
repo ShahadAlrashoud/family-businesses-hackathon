@@ -110,7 +110,7 @@ export default function Dashboard() {
 
         <div className={`grid grid-cols-1 gap-4 sm:grid-cols-2 ${currentContent.stats.length > 2 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
           {currentContent.stats.map((stat) => (
-            <Card key={stat.title} className="hover:shadow-md transition-shadow">
+            <Card key={stat.title} className="card-hover">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">{stat.title}</CardTitle>
                 <stat.icon className="w-4 h-4 text-primary" />
@@ -184,7 +184,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent className="grid gap-3 md:grid-cols-2">
             {currentContent.highlights.map((item) => (
-              <div key={item} className="rounded-2xl border border-border/70 bg-muted/40 px-4 py-4 text-sm text-foreground">
+              <div key={item} className="rounded-2xl border border-border/70 bg-muted/40 px-4 py-4 text-sm text-foreground transition-colors duration-200 hover:bg-muted/70">
                 {item}
               </div>
             ))}
