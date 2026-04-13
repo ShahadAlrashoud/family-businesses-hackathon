@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Shield, CheckCircle2, ArrowLeft, Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
@@ -84,11 +85,13 @@ export default function Login() {
     e.preventDefault();
     setSubmitting("signup");
     const form = new FormData(e.currentTarget);
+    const selectedRole = (form.get("role") as string) || "shareholder";
     try {
       const result = await signUp(
         form.get("email") as string,
         form.get("password") as string,
         form.get("fullName") as string,
+        selectedRole as "admin" | "shareholder" | "independent_director",
       );
 
       if (result.needsEmailConfirmation) {
@@ -194,6 +197,19 @@ export default function Login() {
                 <div className="space-y-2">
                   <Label htmlFor="signup-password">كلمة المرور</Label>
                   <Input id="signup-password" name="password" type="password" required minLength={8} placeholder="••••••••" dir="ltr" autoComplete="new-password" />
+                </div>
+                <div className="space-y-2">
+                  <Label>الدور</Label>
+                  <Select name="role" defaultValue="shareholder">
+                    <SelectTrigger>
+                      <SelectValue placeholder="اختر دورك" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="shareholder">مساهم</SelectItem>
+                      <SelectItem value="independent_director">عضو مستقل</SelectItem>
+                      <SelectItem value="admin">مدير</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <Button type="submit" className="w-full btn-transition" disabled={submitting !== null || loading}>
                   {submitting === "signup" ? "جاري الإنشاء..." : "إنشاء حساب"}

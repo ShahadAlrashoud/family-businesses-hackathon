@@ -89,6 +89,38 @@ export type Database = {
         }
         Relationships: []
       }
+      votes: {
+        Row: {
+          created_at: string
+          id: string
+          regulation_id: string
+          user_id: string
+          vote: Database["public"]["Enums"]["vote_choice"]
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          regulation_id: string
+          user_id: string
+          vote: Database["public"]["Enums"]["vote_choice"]
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          regulation_id?: string
+          user_id?: string
+          vote?: Database["public"]["Enums"]["vote_choice"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "votes_regulation_id_fkey"
+            columns: ["regulation_id"]
+            isOneToOne: false
+            referencedRelation: "regulations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -111,6 +143,7 @@ export type Database = {
         | "disputes"
         | "womens_role"
       regulation_status: "draft" | "active"
+      vote_choice: "approve" | "reject" | "abstain"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -247,6 +280,7 @@ export const Constants = {
         "womens_role",
       ],
       regulation_status: ["draft", "active"],
+      vote_choice: ["approve", "reject", "abstain"],
     },
   },
 } as const
