@@ -198,6 +198,19 @@ export default function Login() {
                   <Label htmlFor="signup-password">كلمة المرور</Label>
                   <Input id="signup-password" name="password" type="password" required minLength={8} placeholder="••••••••" dir="ltr" autoComplete="new-password" />
                 </div>
+                <div className="space-y-2">
+                  <Label>الدور</Label>
+                  <Select name="role" defaultValue="shareholder">
+                    <SelectTrigger>
+                      <SelectValue placeholder="اختر دورك" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="shareholder">مساهم</SelectItem>
+                      <SelectItem value="independent_director">عضو مستقل</SelectItem>
+                      <SelectItem value="admin">مدير</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
                 <Button type="submit" className="w-full btn-transition" disabled={submitting !== null || loading}>
                   {submitting === "signup" ? "جاري الإنشاء..." : "إنشاء حساب"}
                 </Button>
