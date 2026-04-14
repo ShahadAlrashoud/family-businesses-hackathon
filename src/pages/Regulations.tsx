@@ -9,7 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { FileText, Plus, Calendar, Filter, FolderOpen } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { FileText, Plus, Calendar, Filter, FolderOpen, Brain, Loader2, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
@@ -56,6 +57,11 @@ export default function Regulations() {
   const [status, setStatus] = useState<RegStatus>("draft");
   const [content, setContent] = useState("");
 
+  // AI evaluation state
+  const [showEval, setShowEval] = useState(false);
+  const [evalResult, setEvalResult] = useState("");
+  const [evalTitle, setEvalTitle] = useState("");
+
   const { data: regulations = [], isLoading } = useQuery({
     queryKey: ["regulations"],
     queryFn: async () => {
@@ -92,6 +98,30 @@ export default function Regulations() {
     },
     onError: () => toast.error("حدث خطأ أثناء إضافة اللائحة"),
   });
+
+  const evalMutation = useMutation({
+    mutationFn: async (reg: { title: string; content: string | null }) => {
+      const { data, error } = await supabase.functions.invoke("evaluate-regulation", {
+        body: { title: reg.title, content: reg.content || "" },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      return data.evaluation as string;
+    },
+    onSuccess: (result) => {
+      setEvalResult(result);
+    },
+    onError: (err: Error) => {
+      toast.error(err.message || "حدث خطأ أثناء التقييم");
+    },
+  });
+
+  const handleEvaluate = (reg: { title: string; content: string | null }) => {
+    setEvalTitle(reg.title);
+    setEvalResult("");
+    setShowEval(true);
+    evalMutation.mutate(reg);
+  };
 
   const filtered = regulations.filter((r) => {
     if (filterCategory !== "all" && r.category !== filterCategory) return false;
@@ -178,7 +208,7 @@ export default function Regulations() {
         ) : (
           <div className="grid gap-4 md:grid-cols-2">
             {filtered.map((reg) => (
-              <Card key={reg.id} className="card-hover cursor-pointer">
+              <Card key={reg.id} className="card-hover">
                 <CardContent className="p-5 space-y-3">
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
@@ -205,6 +235,20 @@ export default function Regulations() {
                       <span>{new Date(reg.created_at).toLocaleDateString("ar-SA")}</span>
                     </div>
                   </div>
+                  {role === "admin" && (
+                    <div className="pt-2 border-t border-border">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full gap-2 text-primary hover:bg-primary/5 hover:text-primary border-primary/20"
+                        onClick={() => handleEvaluate(reg)}
+                        disabled={evalMutation.isPending}
+                      >
+                        <Brain className="w-4 h-4" />
+                        تقييم بالذكاء الاصطناعي
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))}
@@ -255,6 +299,45 @@ export default function Regulations() {
             <Button onClick={() => addMutation.mutate()} disabled={!title.trim() || addMutation.isPending} className="btn-transition">
               {addMutation.isPending ? "جاري الإضافة..." : "إضافة"}
             </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* AI Evaluation Modal */}
+      <Dialog open={showEval} onOpenChange={setShowEval}>
+        <DialogContent className="sm:max-w-2xl max-h-[85vh]">
+          <DialogHeader>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <DialogTitle className="text-lg">تقييم بالذكاء الاصطناعي</DialogTitle>
+                <DialogDescription className="text-xs mt-0.5">{evalTitle}</DialogDescription>
+              </div>
+            </div>
+          </DialogHeader>
+
+          <ScrollArea className="max-h-[60vh] pr-2">
+            {evalMutation.isPending ? (
+              <div className="flex flex-col items-center justify-center py-16 gap-4">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center animate-pulse">
+                  <Brain className="w-8 h-8 text-primary" />
+                </div>
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span className="text-sm">جاري تحليل اللائحة...</span>
+                </div>
+              </div>
+            ) : evalResult ? (
+              <div className="prose prose-sm max-w-none text-foreground leading-relaxed whitespace-pre-wrap" dir="rtl">
+                {evalResult}
+              </div>
+            ) : null}
+          </ScrollArea>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowEval(false)}>إغلاق</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
