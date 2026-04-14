@@ -72,7 +72,7 @@ export default function Index() {
           <div className="max-w-3xl mx-auto text-center space-y-8">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary-foreground/10 px-5 py-2.5 text-sm text-primary-foreground/90 backdrop-blur-sm border border-primary-foreground/10 animate-fade-in">
               <Shield className="w-4 h-4" />
-              منصة حوكمة عربية متكاملة
+              منصة صلة عربية متكاملة
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-primary-foreground leading-[1.2] animate-fade-in" style={{ animationDelay: "0.1s" }}>
