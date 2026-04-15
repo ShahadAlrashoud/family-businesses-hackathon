@@ -51,7 +51,7 @@ export default function Index() {
             <Shield className="w-5 h-5 text-gold-foreground" />
           </div>
           <div className="flex flex-col">
-            <span className="text-xl font-bold text-foreground tracking-tight">مياثقي</span>
+            <span className="text-xl font-bold text-foreground tracking-tight">ميثاقي</span>
             <span className="text-[10px] text-muted-foreground -mt-1 hidden sm:block">منصة الحوكمة المؤسسية</span>
           </div>
         </div>
@@ -72,7 +72,7 @@ export default function Index() {
           <div className="max-w-3xl mx-auto text-center space-y-8">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary-foreground/10 px-5 py-2.5 text-sm text-primary-foreground/90 backdrop-blur-sm border border-primary-foreground/10 animate-fade-in">
               <Shield className="w-4 h-4" />
-              منصة مياثقي عربية متكاملة
+              منصة ميثاقي عربية متكاملة
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-primary-foreground leading-[1.2] animate-fade-in" style={{ animationDelay: "0.1s" }}>
@@ -145,7 +145,7 @@ export default function Index() {
             <div className="relative space-y-6">
               <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground">جاهز لتطوير حوكمة مؤسستك؟</h2>
               <p className="text-primary-foreground/75 text-base md:text-lg max-w-xl mx-auto">
-                انضم إلى مئات المؤسسات التي تثق بمنصة مياثقي لإدارة الحوكمة المؤسسية بكفاءة عالية
+                انضم إلى مئات المؤسسات التي تثق بمنصة ميثاقي لإدارة الحوكمة المؤسسية بكفاءة عالية
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link to="/login?tab=signup">
@@ -175,9 +175,9 @@ export default function Index() {
             <div className="w-9 h-9 rounded-lg gradient-gold flex items-center justify-center">
               <Shield className="w-4 h-4 text-gold-foreground" />
             </div>
-            <span className="font-bold text-foreground">مياثقي</span>
+            <span className="font-bold text-foreground">ميثاقي</span>
           </div>
-          <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} مياثقي — جميع الحقوق محفوظة</p>
+          <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} ميثاقي — جميع الحقوق محفوظة</p>
         </div>
       </footer>
     </div>

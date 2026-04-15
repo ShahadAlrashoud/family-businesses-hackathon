@@ -44,7 +44,7 @@ export function AppSidebar() {
             <div className="w-8 h-8 rounded-md gradient-gold flex items-center justify-center shrink-0">
               <Shield className="w-4 h-4 text-gold-foreground" />
             </div>
-            {!collapsed && <span className="font-bold text-base">مياثقي</span>}
+            {!collapsed && <span className="font-bold text-base">ميثاقي</span>}
           </SidebarGroupLabel>
 
           <SidebarGroupContent>
