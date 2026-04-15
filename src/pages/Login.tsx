@@ -120,7 +120,7 @@ export default function Login() {
                   <Shield className="w-6 h-6 text-gold-foreground" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">صلة</p>
+                  <p className="text-2xl font-bold">مياثقي</p>
                   <p className="text-sm text-primary-foreground/80">منصة حوكمة مؤسسية عربية جاهزة للعمل</p>
                 </div>
               </Link>
@@ -153,7 +153,7 @@ export default function Login() {
                 <div className="w-10 h-10 rounded-lg gradient-gold flex items-center justify-center">
                   <Shield className="w-5 h-5 text-gold-foreground" />
                 </div>
-                <span className="text-xl font-bold text-foreground">صلة</span>
+                <span className="text-xl font-bold text-foreground">مياثقي</span>
               </Link>
               <CardTitle className="text-3xl">مرحباً بك</CardTitle>
               <CardDescription className="text-base">
