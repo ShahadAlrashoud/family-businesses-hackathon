@@ -1,7 +1,6 @@
-**Family Business Governance Platform**
+# **Family Business Governance Platform**
 
-## Overview
-Sila is an Arabic digital platform developed to support governance practices in family businesses. It provides a centralized and structured environment for managing internal regulations, organizing voting processes, monitoring compliance, and improving communication among stakeholders. The platform is designed to make governance more efficient, transparent, and accessible through a modern digital experience.
+Arabic digital platform developed to support governance practices in family businesses. It provides a centralized and structured environment for managing internal regulations, organizing voting processes, monitoring compliance, and improving communication among stakeholders. The platform is designed to make governance more efficient, transparent, and accessible through a modern digital experience.
 
 ## Background
 Family businesses often face challenges in governance due to informal processes, limited role clarity, inconsistent regulation management, and a lack of structured communication. These challenges may affect decision-making quality, compliance, and organizational stability. Sila was proposed as a digital solution to address these issues by offering a unified platform tailored to the governance needs of family-owned businesses.
