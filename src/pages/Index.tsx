@@ -50,10 +50,7 @@ export default function Index() {
           <div className="w-11 h-11 rounded-xl gradient-gold flex items-center justify-center shadow-md">
             <Shield className="w-5 h-5 text-gold-foreground" />
           </div>
-          <div className="flex flex-col">
-            <span className="text-xl font-bold text-foreground tracking-tight">ميثاقي</span>
-            <span className="text-[10px] text-muted-foreground -mt-1 hidden sm:block">منصة الحوكمة المؤسسية</span>
-          </div>
+          <span className="text-xl font-bold text-foreground tracking-tight">ميثاقي</span>
         </div>
         <div className="flex items-center gap-2 sm:gap-3">
           <Link to="/login">
