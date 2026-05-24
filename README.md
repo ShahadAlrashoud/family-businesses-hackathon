@@ -1,5 +1,6 @@
 # **Family Business Governance Platform**
 
+
 Arabic digital platform developed to support governance practices in family businesses. It provides a centralized and structured environment for managing internal regulations, organizing voting processes, monitoring compliance, and improving communication among stakeholders. The platform is designed to make governance more efficient, transparent, and accessible through a modern digital experience.
 
 ## Background
